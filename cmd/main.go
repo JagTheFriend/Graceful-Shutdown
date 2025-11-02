@@ -14,6 +14,7 @@ import (
 func createServer() *http.Server {
 	mux := http.NewServeMux()
 
+	// Simulate a slow request to demonstrate graceful shutdown
 	mux.HandleFunc("/example", func(w http.ResponseWriter, r *http.Request) {
 		log.Default().Println("Slow request started")
 		time.Sleep(8 * time.Second)
@@ -85,6 +86,11 @@ func shutDownServer(server *http.Server, shutdownDuration time.Duration) error {
 
 func main() {
 	server := createServer()
+
+	// Define duration for graceful server shutdown -
+	// This is the maximum amount of time the server will wait for existing connections to finish before shutting down
+	// In this example, we set it to 5 seconds
+	// You can adjust this value based on your application's requirements
 	shutdownDuration := 5 * time.Second
 
 	ctx, cancel := context.WithCancel(context.Background())
